@@ -88,7 +88,7 @@ func BootstrapConfigWithPeers(pis []peer.AddrInfo, options ...func(*BootstrapCon
 // WithBackupPeers configures functions to load and save backup bootstrap peers.
 func WithBackupPeers(load func(context.Context) []peer.AddrInfo, save func(context.Context, []peer.AddrInfo)) func(*BootstrapConfig) {
 	if save == nil && load != nil || save != nil && load == nil {
-		panic("both save an load backup bootstrap peers functions must be defined")
+		panic("both load and save backup bootstrap peers functions must be defined")
 	}
 	return func(cfg *BootstrapConfig) {
 		cfg.LoadBackupBootstrapPeers = load
@@ -103,7 +103,7 @@ func WithBackupPeers(load func(context.Context) []peer.AddrInfo, save func(conte
 func Bootstrap(id peer.ID, host host.Host, rt routing.Routing, cfg BootstrapConfig) (io.Closer, error) {
 	if cfg.LoadBackupBootstrapPeers == nil || cfg.SaveBackupBootstrapPeers == nil {
 		if cfg.LoadBackupBootstrapPeers != nil || cfg.SaveBackupBootstrapPeers != nil {
-			return nil, errors.New("LoadBackupBootstrapPeers and SaveBackupBootstrapPeers must both be defeind or nil")
+			return nil, errors.New("LoadBackupBootstrapPeers and SaveBackupBootstrapPeers must both be defined or nil")
 		}
 	}
 
